@@ -40,9 +40,8 @@ if not DEBUG:
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    'boutique-ado-skb399.herokuapp.com',
+    'boutique-ado-skb399-60b34a39c078.herokuapp.com',
 ]
-
 
 # Application definition
 
