@@ -11,25 +11,36 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
-if os.path.isfile('env.py'):
-    import env # flake8 will throw an error here, but it is necessary to import env.py
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+if os.path.isfile('env.py'):
+    import env
+    
+import dj_database_url
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env
+load_dotenv(BASE_DIR / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+# Read the secret key from environment variables
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bf_nx7m0sd(kbofoqv1g*ba))$ux)2(ju#mr-kr5#21@5iql_d'
+# Enable debug only during local development
+DEBUG = os.environ.get('DEVELOPMENT') == '1'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Production security settings
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 0
 
 ALLOWED_HOSTS = [
-    '127.0.0.1', # vs code preview
-    'localhost', # listen for stripe webhooks
+    '127.0.0.1',
+    'localhost',
+    'boutique-ado-skb399.herokuapp.com',
 ]
 
 
@@ -126,10 +137,10 @@ WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600,
+    )
 }
 
 
