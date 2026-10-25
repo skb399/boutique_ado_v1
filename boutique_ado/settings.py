@@ -203,13 +203,13 @@ if 'USE_AWS' in os.environ:
 
     # Django 5.2 storage configuration
     STORAGES = {
-        'default': {
-            'BACKEND': 'custom_storages.MediaStorage',
-        },
-        'staticfiles': {
-            'BACKEND': 'custom_storages.StaticStorage',
-        },
-    }
+    'default': {
+        'BACKEND': 'boutique_ado.custom_storages.MediaStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'boutique_ado.custom_storages.StaticStorage',
+    },
+}
 
     # Override static and media URLs in production
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
